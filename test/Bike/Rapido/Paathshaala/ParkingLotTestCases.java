@@ -1,6 +1,5 @@
-package Bike.Rapido.Bike;
+package Bike.Rapido.Paathshaala;
 
-import Bike.Rapido.Pathshala.ParkingLot;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

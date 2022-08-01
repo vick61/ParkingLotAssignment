@@ -1,4 +1,4 @@
-package Bike.Rapido.Pathshala;
+package Bike.Rapido.Paathshaala;
 
 class ParkingTicket{
     //String driverName;
