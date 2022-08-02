@@ -20,13 +20,13 @@ public class ParkingLotTestCases {
     @Test
     void parkAndUnParkTheCar() {
         ParkingLot pl=new ParkingLot();
-        int allotId=pl.allotParking("br02");
+        int slotId=pl.allotParking("br02");
 
-        boolean slotOccupied=pl.checkGivenParkingSlotEmpty(allotId);
+        boolean slotOccupied=pl.checkGivenParkingSlotEmpty(slotId);
 
         assertEquals(false,slotOccupied);
 
-        boolean emptySlot =pl.deallotParking(allotId);
+        boolean emptySlot =pl.deallotParking(slotId);
 
         assertEquals(true,emptySlot);
 

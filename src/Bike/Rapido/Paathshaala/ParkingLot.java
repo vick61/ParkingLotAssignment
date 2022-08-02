@@ -1,5 +1,9 @@
 package Bike.Rapido.Paathshaala;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 class ParkingTicket{
     //String driverName;
     String carNumber;
@@ -13,6 +17,9 @@ class ParkingTicket{
 
 
 
+
+
+
 public class ParkingLot {
     ParkingSpace[] ps=new ParkingSpace[10];
     public ParkingLot() {
@@ -21,6 +28,24 @@ public class ParkingLot {
             ps[count] = new ParkingSpace(count);
         }
     }
+
+   private List <ParkingLotObserver>lotObserver =new ArrayList<>();
+   public void addObserver(ParkingLotObserver plo){
+       this.lotObserver.add(plo);
+   }
+   public void removeObserver(ParkingLotObserver plo)
+   {
+       this.lotObserver.remove(plo);
+   }
+
+   public void notifyToAllObserver(){
+       for(ParkingLotObserver plo:this.lotObserver){
+           plo.notifyObserver();
+       }
+
+
+   }
+
    public  int allotParking( String carNumber) {
 
 
@@ -50,6 +75,7 @@ public class ParkingLot {
            if(ps[count].getIsEmpty())
                return false;
        }
+       notifyToAllObserver();
        return true;
    }
    public boolean checkGivenParkingSlotEmpty(int id){
@@ -59,6 +85,7 @@ public class ParkingLot {
     public boolean checkAnyParkingSlotEmpty(){
          return !isFull();
     }
+
 
 
 
@@ -98,3 +125,8 @@ public class ParkingLot {
 
 
 }
+
+
+
+
+
