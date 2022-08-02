@@ -14,7 +14,8 @@ public class ParkingLotTestCases {
 
         boolean isLotFull=parkingLot.isFull();
 
-        assertEquals(true,isLotFull);
+        assertTrue(isLotFull);
+
     }
 
     @Test
@@ -22,13 +23,15 @@ public class ParkingLotTestCases {
         ParkingLot parkingLot=new ParkingLot();
         int slotId=parkingLot.allotParking("br02");
 
-        boolean slotOccupied=parkingLot.checkGivenParkingSlotEmpty(slotId);
+        boolean isSlotEmpty=parkingLot.checkGivenParkingSlotEmpty(slotId);
 
-        assertEquals(false,slotOccupied);
+        assertFalse(isSlotEmpty);
 
-        boolean emptySlot =parkingLot.deallotParking(slotId);
 
-        assertEquals(true,emptySlot);
+         isSlotEmpty =parkingLot.deallotParking(slotId);
+
+         assertTrue(isSlotEmpty);
+
 
     }
 
@@ -44,7 +47,8 @@ public class ParkingLotTestCases {
 
         boolean anyEmptySlot= parkingLot.checkAnyParkingSlotEmpty();
 
-        assertEquals(true,anyEmptySlot);
+        assertTrue(anyEmptySlot);
+
 
 
         for(int count=0;count<5;count++)
@@ -52,48 +56,72 @@ public class ParkingLotTestCases {
             parkingLot.allotParking("bro1");
         }
 
-        boolean isSlotFull=parkingLot.checkAnyParkingSlotEmpty();
+        boolean isSlotEmpty=parkingLot.checkAnyParkingSlotEmpty();
+
+        assertFalse(isSlotEmpty);
 
 
-        assertEquals(false,isSlotFull);
 
     }
 
     @Test
-    void sendNotificationAboutLotIsFull() {
+    void sendNotificationToLotOwnerAndSecurityPersonalWhenLotIsFull() {
         ParkingLot observable=new ParkingLot();
+
+
         LotOwner observer1BehavesAsLotOwner=new LotOwner();
         SecurityPersonal observer2BehavesAsSecurityPersonal=new SecurityPersonal();
+
         observable.addObserver(observer1BehavesAsLotOwner);
         observable.addObserver(observer2BehavesAsSecurityPersonal);
 
 
-        boolean notifiedToAllObserver=observable.notifyToAllObserverToTakeOutTheFullSign();
+        for(int count=0;count<10;count++)
+        {
+            observable.allotParking("bro1");
+        }
 
-        assertEquals(true,notifiedToAllObserver);
 
-        observable.removeObserver(observer1BehavesAsLotOwner);
-        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserverToTakeOutTheFullSign();
+        boolean notifiedToLotOwner=observer1BehavesAsLotOwner.isLotFull();
 
-        assertEquals(true,notifiedOnlySecurityPersonal);
+        assertTrue(notifiedToLotOwner);
+
+
+
+
+        boolean notifiedToSecurityPersonal=observer2BehavesAsSecurityPersonal.isLotFull();
+
+        assertTrue(notifiedToSecurityPersonal);
+
+
     }
 
     @Test
-    void sendNotificationAboutLotIsNotFull() {
+    void sendNotificationToLotOwnerWhenLotHasSpaceAgain() {
         ParkingLot observable=new ParkingLot();
+        for(int count=0;count<10;count++)
+        {
+            observable.allotParking("bro1");
+        }
+
         LotOwner observer1BehavesAsLotOwner=new LotOwner();
-        SecurityPersonal observer2BehavesAsSecurityPersonal=new SecurityPersonal();
-        observable.addObserver(observer1BehavesAsLotOwner);
-        observable.addObserver(observer2BehavesAsSecurityPersonal);
+
+        observable.addObserverForNotifyingLotHasSpaceAgain(observer1BehavesAsLotOwner);
+
+        observable.deallotParking(9);
 
 
-        boolean notifiedToAllObserver=observable.notifyToAllObserverToTakeInTheFullSign();
 
-        assertEquals(true,notifiedToAllObserver);
 
-        observable.removeObserver(observer1BehavesAsLotOwner);
-        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserverToTakeInTheFullSign();
+        boolean notifiedLotOwner=observer1BehavesAsLotOwner.hasLotSpaceAgain();
 
-        assertEquals(true,notifiedOnlySecurityPersonal);
+         assertTrue(notifiedLotOwner);
+
+        //assertEquals(true,notifiedLotOwner);
+
+
+
+
+
     }
 }

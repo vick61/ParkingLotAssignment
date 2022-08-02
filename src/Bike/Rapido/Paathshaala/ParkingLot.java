@@ -1,6 +1,5 @@
 package Bike.Rapido.Paathshaala;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 public class ParkingLot {
@@ -12,30 +11,36 @@ public class ParkingLot {
         }
     }
 
-   private List <ParkingLotObserver>lotObserver =new ArrayList<>();
-   public void addObserver(ParkingLotObserver variableOfParkingLotObserver)
+   private List <ParkingLotObserver> registeredObserversNotifyWhenLotIsFull =new ArrayList<>();
+    private List <ParkingLotObserver>registeredObserversForNotifyingLotHasSpaceAgain =new ArrayList<>();
+   public void addObserver(ParkingLotObserver parkingLotObserver)
    {
-       this.lotObserver.add(variableOfParkingLotObserver);
+       this.registeredObserversNotifyWhenLotIsFull.add(parkingLotObserver);
    }
-   public void removeObserver(ParkingLotObserver variableOfParkingLotObserver)
+   public void removeObserver(ParkingLotObserver parkingLotObserver)
    {
-       this.lotObserver.remove(variableOfParkingLotObserver);
+       this.registeredObserversNotifyWhenLotIsFull.remove(parkingLotObserver);
    }
 
-   public boolean notifyToAllObserverToTakeOutTheFullSign() {
-       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver)
+    public void addObserverForNotifyingLotHasSpaceAgain(ParkingLotObserver parkingLotObserver)
+    {
+        this.registeredObserversForNotifyingLotHasSpaceAgain.add(parkingLotObserver);
+    }
+
+   public void notifyToAllObservers() {
+       for(ParkingLotObserver parkingLotObserver:this.registeredObserversNotifyWhenLotIsFull)
        {
-           variableOfParkingLotObserver.notifyObserversToTakeOutTheFullSign();
+           parkingLotObserver.notifyObservers();
        }
-       return true;
+
 
    }
-   public boolean notifyToAllObserverToTakeInTheFullSign(){
-       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver)
+   public void notifyObserverWhenLotHasSpaceAgain(){
+       for(ParkingLotObserver parkingLotObserver:this.registeredObserversForNotifyingLotHasSpaceAgain)
        {
-           variableOfParkingLotObserver.notifyObserversToTakeInTheFullSign();
+           parkingLotObserver.notifyObserverWhenLotHasSpaceAgain();
        }
-       return true;
+
    }
 
    public  int allotParking( String carNumber) {
@@ -46,7 +51,10 @@ public class ParkingLot {
            if (parkingSpace[count].getIsEmpty())
            {
                if (parkingSpace[count].generateTicket(carNumber))
+               {   if(isFull())
                {
+                   notifyToAllObservers();
+               }
                    return count;
                }
 
@@ -59,6 +67,9 @@ public class ParkingLot {
    }
 
    public boolean deallotParking(int id){
+         if(!checkAnyParkingSlotEmpty()){
+             notifyObserverWhenLotHasSpaceAgain();
+         }
          return  parkingSpace[id].emptyParkingSpace();
    }
    public boolean isFull(){
@@ -67,7 +78,7 @@ public class ParkingLot {
            if(parkingSpace[count].getIsEmpty())
                return false;
        }
-       notifyToAllObserverToTakeOutTheFullSign();
+
        return true;
    }
    public boolean checkGivenParkingSlotEmpty(int id){
@@ -81,11 +92,11 @@ public class ParkingLot {
             if(parkingSpace[count].getIsEmpty())
                 return true;
         }
-        notifyToAllObserverToTakeInTheFullSign();
+
         return false;
 
-
     }
+
 
 }
 
