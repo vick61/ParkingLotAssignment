@@ -7,11 +7,14 @@ public class ParkingLotTestCases {
     @Test
     void checkParkinglotIsFull() {
         ParkingLot pl=new ParkingLot();
-        for(int count=0;count<10;count++){
+        for(int count=0;count<10;count++)
+        {
             pl.allotParking("bro1");
         }
 
-        assertEquals(true,pl.isFull());
+        boolean isLotFull=pl.isFull();
+
+        assertEquals(true,isLotFull);
     }
 
     @Test
@@ -19,11 +22,13 @@ public class ParkingLotTestCases {
         ParkingLot pl=new ParkingLot();
         int allotId=pl.allotParking("br02");
 
-        assertEquals(false,pl.checkGivenParkingSlotEmpty(allotId));
+        boolean slotOccupied=pl.checkGivenParkingSlotEmpty(allotId);
 
-        pl.deallotParking(allotId);
+        assertEquals(false,slotOccupied);
 
-        assertEquals(true,pl.checkGivenParkingSlotEmpty(allotId));
+        boolean emptySlot =pl.deallotParking(allotId);
+
+        assertEquals(true,emptySlot);
 
     }
 
@@ -32,38 +37,33 @@ public class ParkingLotTestCases {
     @Test
     void checkEmptySlotIsAvailable() {
         ParkingLot pl=new ParkingLot();
-        for(int count=0;count<5;count++){
+        for(int count=0;count<5;count++)
+        {
             pl.allotParking("bro1");
         }
 
-        assertEquals(true,pl.checkAnyParkingSlotEmpty());
+        boolean anyEmptySlot= pl.checkAnyParkingSlotEmpty();
+
+        assertEquals(true,anyEmptySlot);
 
 
-        for(int count=0;count<5;count++){
+        for(int count=0;count<5;count++)
+        {
             pl.allotParking("bro1");
         }
 
-        assertEquals(false,pl.checkAnyParkingSlotEmpty());
+        boolean isSlotFull=pl.checkAnyParkingSlotEmpty();
+
+
+        assertEquals(false,isSlotFull);
 
     }
 
 
-    /* @Test
-    void parkTheCar() {
-        Boolean parkedThecar=ParkingLot.allotParking("Vick","br02");
-
-        assertEquals(true,true);
-    }
 
 
 
 
-  //  @Test
-    void isEmpty() {
-
-    }
-
-   */
 
 
 }

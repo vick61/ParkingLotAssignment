@@ -3,7 +3,8 @@ package Bike.Rapido.Paathshaala;
 class ParkingTicket{
     //String driverName;
     String carNumber;
-    ParkingTicket(String carNumber){
+    ParkingTicket(String carNumber)
+    {
         //this.driverName=driverName;
         this.carNumber=carNumber;
     }
@@ -15,16 +16,20 @@ class ParkingTicket{
 public class ParkingLot {
     ParkingSpace[] ps=new ParkingSpace[10];
     public ParkingLot() {
-        for (int count = 0; count < 10; count++) {
+        for (int count = 0; count < 10; count++)
+        {
             ps[count] = new ParkingSpace(count);
         }
     }
    public  int allotParking( String carNumber) {
 
 
-       for (int count = 0; count < 10; count++) {
-           if (ps[count].getIsEmpty()) {
-               if (ps[count].generateTicket(carNumber)) {
+       for (int count = 0; count < 10; count++)
+       {
+           if (ps[count].getIsEmpty())
+           {
+               if (ps[count].generateTicket(carNumber))
+               {
                    return count;
                }
 
@@ -32,17 +37,16 @@ public class ParkingLot {
            }
 
        }
-       System.out.println("Parking Slots is Full");
+
        return -1;
    }
 
    public boolean deallotParking(int id){
          return  ps[id].emptyParkingSpace();
-
-
    }
    public boolean isFull(){
-       for (int count = 0; count < 10; count++) {
+       for (int count = 0; count < 10; count++)
+       {
            if(ps[count].getIsEmpty())
                return false;
        }
@@ -50,7 +54,6 @@ public class ParkingLot {
    }
    public boolean checkGivenParkingSlotEmpty(int id){
             return ps[id].getIsEmpty();
-
    }
 
     public boolean checkAnyParkingSlotEmpty(){
@@ -76,7 +79,8 @@ public class ParkingLot {
         return isEmpty;
     }
     public boolean  generateTicket(String carNumber){
-        if(!isEmpty){
+        if(!isEmpty)
+        {
             return false;
         }
         else
@@ -91,8 +95,6 @@ public class ParkingLot {
         ticket=null;
         return true;
     }
-
-
 
 
 }
