@@ -3,34 +3,18 @@ package Bike.Rapido.Paathshaala;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-
-class ParkingTicket{
-    //String driverName;
-    String carNumber;
-    ParkingTicket(String carNumber)
-    {
-        //this.driverName=driverName;
-        this.carNumber=carNumber;
-    }
-}
-
-
-
-
-
-
-
 public class ParkingLot {
-    ParkingSpace[] ps=new ParkingSpace[10];
+    ParkingSpace[] parkingSpace=new ParkingSpace[10];
     public ParkingLot() {
         for (int count = 0; count < 10; count++)
         {
-            ps[count] = new ParkingSpace(count);
+            parkingSpace[count] = new ParkingSpace(count);
         }
     }
 
    private List <ParkingLotObserver>lotObserver =new ArrayList<>();
-   public void addObserver(ParkingLotObserver variableOfParkingLotObserver){
+   public void addObserver(ParkingLotObserver variableOfParkingLotObserver)
+   {
        this.lotObserver.add(variableOfParkingLotObserver);
    }
    public void removeObserver(ParkingLotObserver variableOfParkingLotObserver)
@@ -38,13 +22,20 @@ public class ParkingLot {
        this.lotObserver.remove(variableOfParkingLotObserver);
    }
 
-   public boolean notifyToAllObserver(){
-       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver){
-           variableOfParkingLotObserver.notifyObservers();
+   public boolean notifyToAllObserverToTakeOutTheFullSign() {
+       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver)
+       {
+           variableOfParkingLotObserver.notifyObserversToTakeOutTheFullSign();
        }
        return true;
 
-
+   }
+   public boolean notifyToAllObserverToTakeInTheFullSign(){
+       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver)
+       {
+           variableOfParkingLotObserver.notifyObserversToTakeInTheFullSign();
+       }
+       return true;
    }
 
    public  int allotParking( String carNumber) {
@@ -52,9 +43,9 @@ public class ParkingLot {
 
        for (int count = 0; count < 10; count++)
        {
-           if (ps[count].getIsEmpty())
+           if (parkingSpace[count].getIsEmpty())
            {
-               if (ps[count].generateTicket(carNumber))
+               if (parkingSpace[count].generateTicket(carNumber))
                {
                    return count;
                }
@@ -68,27 +59,33 @@ public class ParkingLot {
    }
 
    public boolean deallotParking(int id){
-         return  ps[id].emptyParkingSpace();
+         return  parkingSpace[id].emptyParkingSpace();
    }
    public boolean isFull(){
        for (int count = 0; count < 10; count++)
        {
-           if(ps[count].getIsEmpty())
+           if(parkingSpace[count].getIsEmpty())
                return false;
        }
-       notifyToAllObserver();
+       notifyToAllObserverToTakeOutTheFullSign();
        return true;
    }
    public boolean checkGivenParkingSlotEmpty(int id){
-            return ps[id].getIsEmpty();
+            return parkingSpace[id].getIsEmpty();
    }
 
     public boolean checkAnyParkingSlotEmpty(){
-         return !isFull();
+
+        for (int count = 0; count < 10; count++)
+        {
+            if(parkingSpace[count].getIsEmpty())
+                return true;
+        }
+        notifyToAllObserverToTakeInTheFullSign();
+        return false;
+
+
     }
-
-
-
 
 }
 
@@ -96,11 +93,12 @@ public class ParkingLot {
     private  int id;
     private  boolean isEmpty;
 
-    private  ParkingTicket ticket;
+    private  String carNumber;
     ParkingSpace(int id)
     {
         this.id=id;
         this.isEmpty=true;
+        this.carNumber=null;
 
     }
     public boolean getIsEmpty(){
@@ -113,18 +111,16 @@ public class ParkingLot {
         }
         else
         {
-            ticket=new ParkingTicket(carNumber);
+            this.carNumber=carNumber;
             isEmpty=false;
         }
         return true;
     }
     public boolean emptyParkingSpace(){
         isEmpty=true;
-        ticket=null;
+        carNumber=null;
         return true;
     }
-
-
 }
 
 

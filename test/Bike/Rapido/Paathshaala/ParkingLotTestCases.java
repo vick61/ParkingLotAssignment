@@ -6,27 +6,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParkingLotTestCases {
     @Test
     void checkParkinglotIsFull() {
-        ParkingLot pl=new ParkingLot();
+        ParkingLot parkingLot=new ParkingLot();
         for(int count=0;count<10;count++)
         {
-            pl.allotParking("bro1");
+            parkingLot.allotParking("bro1");
         }
 
-        boolean isLotFull=pl.isFull();
+        boolean isLotFull=parkingLot.isFull();
 
         assertEquals(true,isLotFull);
     }
 
     @Test
     void parkAndUnParkTheCar() {
-        ParkingLot pl=new ParkingLot();
-        int slotId=pl.allotParking("br02");
+        ParkingLot parkingLot=new ParkingLot();
+        int slotId=parkingLot.allotParking("br02");
 
-        boolean slotOccupied=pl.checkGivenParkingSlotEmpty(slotId);
+        boolean slotOccupied=parkingLot.checkGivenParkingSlotEmpty(slotId);
 
         assertEquals(false,slotOccupied);
 
-        boolean emptySlot =pl.deallotParking(slotId);
+        boolean emptySlot =parkingLot.deallotParking(slotId);
 
         assertEquals(true,emptySlot);
 
@@ -36,23 +36,23 @@ public class ParkingLotTestCases {
 
     @Test
     void checkEmptySlotIsAvailable() {
-        ParkingLot pl=new ParkingLot();
+        ParkingLot parkingLot=new ParkingLot();
         for(int count=0;count<5;count++)
         {
-            pl.allotParking("bro1");
+            parkingLot.allotParking("bro1");
         }
 
-        boolean anyEmptySlot= pl.checkAnyParkingSlotEmpty();
+        boolean anyEmptySlot= parkingLot.checkAnyParkingSlotEmpty();
 
         assertEquals(true,anyEmptySlot);
 
 
         for(int count=0;count<5;count++)
         {
-            pl.allotParking("bro1");
+            parkingLot.allotParking("bro1");
         }
 
-        boolean isSlotFull=pl.checkAnyParkingSlotEmpty();
+        boolean isSlotFull=parkingLot.checkAnyParkingSlotEmpty();
 
 
         assertEquals(false,isSlotFull);
@@ -62,23 +62,38 @@ public class ParkingLotTestCases {
     @Test
     void sendNotificationAboutLotIsFull() {
         ParkingLot observable=new ParkingLot();
-        LotOwner overserver1BehavesAsLotOwner=new LotOwner();
-        SecurityPersonal overserver2BehavesAsSecurityPersonal=new SecurityPersonal();
-        observable.addObserver(overserver1BehavesAsLotOwner);
-        observable.addObserver(overserver2BehavesAsSecurityPersonal);
+        LotOwner observer1BehavesAsLotOwner=new LotOwner();
+        SecurityPersonal observer2BehavesAsSecurityPersonal=new SecurityPersonal();
+        observable.addObserver(observer1BehavesAsLotOwner);
+        observable.addObserver(observer2BehavesAsSecurityPersonal);
 
 
-        boolean notifiedToAllObserver=observable.notifyToAllObserver();
+        boolean notifiedToAllObserver=observable.notifyToAllObserverToTakeOutTheFullSign();
 
         assertEquals(true,notifiedToAllObserver);
 
-        observable.removeObserver(overserver1BehavesAsLotOwner);
-        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserver();
+        observable.removeObserver(observer1BehavesAsLotOwner);
+        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserverToTakeOutTheFullSign();
 
         assertEquals(true,notifiedOnlySecurityPersonal);
     }
 
-    //@Test
-    //void name() {
-    //}
+    @Test
+    void sendNotificationAboutLotIsNotFull() {
+        ParkingLot observable=new ParkingLot();
+        LotOwner observer1BehavesAsLotOwner=new LotOwner();
+        SecurityPersonal observer2BehavesAsSecurityPersonal=new SecurityPersonal();
+        observable.addObserver(observer1BehavesAsLotOwner);
+        observable.addObserver(observer2BehavesAsSecurityPersonal);
+
+
+        boolean notifiedToAllObserver=observable.notifyToAllObserverToTakeInTheFullSign();
+
+        assertEquals(true,notifiedToAllObserver);
+
+        observable.removeObserver(observer1BehavesAsLotOwner);
+        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserverToTakeInTheFullSign();
+
+        assertEquals(true,notifiedOnlySecurityPersonal);
+    }
 }
