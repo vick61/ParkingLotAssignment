@@ -59,11 +59,26 @@ public class ParkingLotTestCases {
 
     }
 
+    @Test
+    void sendNotificationAboutLotIsFull() {
+        ParkingLot observable=new ParkingLot();
+        LotOwner overserver1BehavesAsLotOwner=new LotOwner();
+        SecurityPersonal overserver2BehavesAsSecurityPersonal=new SecurityPersonal();
+        observable.addObserver(overserver1BehavesAsLotOwner);
+        observable.addObserver(overserver2BehavesAsSecurityPersonal);
 
 
+        boolean notifiedToAllObserver=observable.notifyToAllObserver();
 
+        assertEquals(true,notifiedToAllObserver);
 
+        observable.removeObserver(overserver1BehavesAsLotOwner);
+        boolean notifiedOnlySecurityPersonal=observable.notifyToAllObserver();
 
+        assertEquals(true,notifiedOnlySecurityPersonal);
+    }
 
-
+    //@Test
+    //void name() {
+    //}
 }

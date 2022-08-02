@@ -30,18 +30,19 @@ public class ParkingLot {
     }
 
    private List <ParkingLotObserver>lotObserver =new ArrayList<>();
-   public void addObserver(ParkingLotObserver plo){
-       this.lotObserver.add(plo);
+   public void addObserver(ParkingLotObserver variableOfParkingLotObserver){
+       this.lotObserver.add(variableOfParkingLotObserver);
    }
-   public void removeObserver(ParkingLotObserver plo)
+   public void removeObserver(ParkingLotObserver variableOfParkingLotObserver)
    {
-       this.lotObserver.remove(plo);
+       this.lotObserver.remove(variableOfParkingLotObserver);
    }
 
-   public void notifyToAllObserver(){
-       for(ParkingLotObserver plo:this.lotObserver){
-           plo.notifyObserver();
+   public boolean notifyToAllObserver(){
+       for(ParkingLotObserver variableOfParkingLotObserver:this.lotObserver){
+           variableOfParkingLotObserver.notifyObservers();
        }
+       return true;
 
 
    }
