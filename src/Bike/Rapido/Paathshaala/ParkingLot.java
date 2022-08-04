@@ -3,23 +3,32 @@ package Bike.Rapido.Paathshaala;
 import java.util.ArrayList;
 import java.util.List;
 public class ParkingLot {
-    ParkingSpace[] parkingSpace=new ParkingSpace[10];
-    public ParkingLot() {
-        for (int count = 0; count < 10; count++)
+    ParkingSpace[] parkingSpace;
+    int parkingLotSize;
+    int countOccupiedSlot;
+    public ParkingLot(int parkingLotSize) {
+        this.parkingLotSize=parkingLotSize;
+        parkingSpace=new ParkingSpace[parkingLotSize];
+
+        for (int count = 0; count <parkingLotSize; count++)
         {
             parkingSpace[count] = new ParkingSpace(count);
         }
     }
 
-   private List <ParkingLotObserver> registeredObserversNotifyWhenLotIsFull =new ArrayList<>();
+    public int getCountOccupiedSlot() {
+        return countOccupiedSlot;
+    }
+
+    public int getParkingLotSize() {
+        return parkingLotSize;
+    }
+
+    private List <ParkingLotObserver> registeredObserversNotifyWhenLotIsFull =new ArrayList<>();
     private List <ParkingLotObserver>registeredObserversForNotifyingLotHasSpaceAgain =new ArrayList<>();
-   public void addObserver(ParkingLotObserver parkingLotObserver)
+   public void addObserverForNotifyingWhenLotIsFull(ParkingLotObserver parkingLotObserver)
    {
        this.registeredObserversNotifyWhenLotIsFull.add(parkingLotObserver);
-   }
-   public void removeObserver(ParkingLotObserver parkingLotObserver)
-   {
-       this.registeredObserversNotifyWhenLotIsFull.remove(parkingLotObserver);
    }
 
     public void addObserverForNotifyingLotHasSpaceAgain(ParkingLotObserver parkingLotObserver)
@@ -43,19 +52,20 @@ public class ParkingLot {
 
    }
 
-   public  int allotParking( String carNumber) {
+   public  int allotParkingSpace(String carNumber) {
 
 
-       for (int count = 0; count < 10; count++)
+       for (int countParkingSlot = 0; countParkingSlot <parkingLotSize; countParkingSlot++)
        {
-           if (parkingSpace[count].getIsEmpty())
+           if (parkingSpace[countParkingSlot].getIsEmpty())
            {
-               if (parkingSpace[count].generateTicket(carNumber))
-               {   if(isFull())
-               {
+               if (parkingSpace[countParkingSlot].generateTicket(carNumber))
+               {    countOccupiedSlot +=1;
+                   if(isFull())
+                  {
                    notifyToAllObservers();
-               }
-                   return count;
+                  }
+                   return countParkingSlot;
                }
 
 
@@ -66,20 +76,19 @@ public class ParkingLot {
        return -1;
    }
 
-   public boolean deallotParking(int id){
-         if(!checkAnyParkingSlotEmpty()){
+   public boolean deallotParkingSpace(int id){
+         if(!checkAnyParkingSlotEmpty())
+         {
              notifyObserverWhenLotHasSpaceAgain();
+         }
+         if(!checkGivenParkingSlotEmpty(id)){
+             countOccupiedSlot -=1;
          }
          return  parkingSpace[id].emptyParkingSpace();
    }
    public boolean isFull(){
-       for (int count = 0; count < 10; count++)
-       {
-           if(parkingSpace[count].getIsEmpty())
-               return false;
-       }
 
-       return true;
+       return countOccupiedSlot ==parkingLotSize;
    }
    public boolean checkGivenParkingSlotEmpty(int id){
             return parkingSpace[id].getIsEmpty();
@@ -87,9 +96,9 @@ public class ParkingLot {
 
     public boolean checkAnyParkingSlotEmpty(){
 
-        for (int count = 0; count < 10; count++)
+        for (int countParkingSlot = 0; countParkingSlot < parkingLotSize; countParkingSlot++)
         {
-            if(parkingSpace[count].getIsEmpty())
+            if(parkingSpace[countParkingSlot].getIsEmpty())
                 return true;
         }
 
