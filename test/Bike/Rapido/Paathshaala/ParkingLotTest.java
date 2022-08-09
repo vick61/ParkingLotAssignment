@@ -1,5 +1,6 @@
 package Bike.Rapido.Paathshaala;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,9 +16,8 @@ public class ParkingLotTest {
     }
 
 
-
     @Test
-    void parkTheCar() {
+    void shouldParkTheCar() {
         ParkingLot parkingLot=new ParkingLot(1);
         int slotId=parkingLot.allotParkingSpace("BR02");
 
@@ -28,7 +28,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void unparkTheCar() {
+    void shouldUnparkTheCar() {
         ParkingLot parkingLot=new ParkingLot(1);
         int slotId=parkingLot.allotParkingSpace("BR02");
 
@@ -54,7 +54,7 @@ public class ParkingLotTest {
 
 
     @Test
-    void sendNotificationToLotOwnerWhenLotIsFull() {
+    void shouldSendNotificationToLotOwnerWhenLotIsFull() {
         ParkingLot observable=new ParkingLot(1);
         LotOwner observer1BehavesAsLotOwner=new LotOwner();
 
@@ -71,8 +71,10 @@ public class ParkingLotTest {
 
     }
 
+
+
     @Test
-    void sendNotificationToSecurityPersonalWhenLotIsFull() {
+    void shouldSendNotificationToSecurityPersonalWhenLotIsFull() {
 
         ParkingLot observable=new ParkingLot(1);
         SecurityPersonal observer2BehavesAsSecurityPersonal=new SecurityPersonal();
@@ -89,7 +91,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void sendNotificationToLotOwnerWhenLotHasSpaceAgain() {
+    void ShoulsSendNotificationToLotOwnerWhenLotHasSpaceAgain() {
 
         ParkingLot observable=new ParkingLot(1);
         observable.allotParkingSpace("bro1");
@@ -105,47 +107,70 @@ public class ParkingLotTest {
     }
 
     @Test
-    void parkTheCarByParkingAssistant() {
+    void shouldParkTheCarByParkingAssistant() {
         ParkingLot []parkingLots=new ParkingLot[2];
         parkingLots[0]=new ParkingLot(2);
         parkingLots[1]=new ParkingLot(2);
+        FirstFreeLotParking strategy=new FirstFreeLotParking();
 
         ParkingAssistant parkingAssistant=new ParkingAssistant(parkingLots,2);
 
-        assertNotEquals(-1,parkingAssistant.parkTheCar("bro1"));
+        assertNotEquals(-1,parkingAssistant.parkTheCarByParkingAssistant("bro1",strategy));
 
     }
 
 
     @Test
 
-    void unparkTheCarByParkingAssistant () {
+    void shouldUnparkTheCarByParkingAssistant () {
 
             ParkingLot[] parkingLots = new ParkingLot[2];
             parkingLots[0] = new ParkingLot(2);
             parkingLots[1] = new ParkingLot(2);
+            FirstFreeLotParking strategy =new FirstFreeLotParking();
             ParkingAssistant parkingAssistant = new ParkingAssistant(parkingLots, 2);
-            int parkingSpaceId = parkingAssistant.parkTheCar("bro1");
+            int parkingSlotId = parkingAssistant.parkTheCarByParkingAssistant("bro1",strategy);
 
-            parkingAssistant.unparkTheCar(0, parkingSpaceId);
+            parkingAssistant.unparkTheCarByParkingAssistant(0, parkingSlotId);
 
-            assertTrue(parkingLots[0].checkGivenParkingSlotEmpty(parkingSpaceId));
+            assertTrue(parkingLots[0].checkGivenParkingSlotEmpty(parkingSlotId));
         }
 
     @Test
-    void ParkEvenlyInParkingLots() {
-
+    void shouldParkEvenlyInParkingLots() {
+        EvenlyDistributionOfParkingVehicle strategy=new EvenlyDistributionOfParkingVehicle();
         ParkingLot[] parkingLots=new ParkingLot[2];
         parkingLots[0]=new ParkingLot(2);
         parkingLots[1]=new ParkingLot(2);
         ParkingAssistant parkingAssistant=new ParkingAssistant(parkingLots,2);
 
-        int parkingSpaceId1=parkingAssistant.parkTheCarEvenlyInParkingLots("Br01");
-        int parkingSpaceId2=parkingAssistant.parkTheCarEvenlyInParkingLots("Br02");
+        int parkingLotId1=parkingAssistant.parkTheCarByParkingAssistant("Br01",strategy);
+        int parkingLotId2=parkingAssistant.parkTheCarByParkingAssistant("Br02",strategy);
 
 
-        assertFalse(parkingLots[0].checkGivenParkingSlotEmpty(parkingSpaceId1));
-        assertFalse(parkingLots[1].checkGivenParkingSlotEmpty(parkingSpaceId2));
+        assertFalse(parkingLots[0].checkGivenParkingSlotEmpty(parkingLotId1));
+        assertFalse(parkingLots[1].checkGivenParkingSlotEmpty(parkingLotId2));
+
+    }
+
+    @Test
+    void shouldParkFisrtFreeInParkingLots() {
+
+            EvenlyDistributionOfParkingVehicle strategy=new EvenlyDistributionOfParkingVehicle();
+
+            FirstFreeLotParking strategy1 =new FirstFreeLotParking();
+            ParkingLot[] parkingLots=new ParkingLot[2];
+            parkingLots[0]=new ParkingLot(2);
+            parkingLots[1]=new ParkingLot(2);
+            ParkingAssistant parkingAssistant=new ParkingAssistant(parkingLots,2);
+
+            int parkingLotId1=parkingAssistant.parkTheCarByParkingAssistant("Br01",strategy1);
+            int parkingLotId2=parkingAssistant.parkTheCarByParkingAssistant("Br02",strategy1);
+
+
+            assertFalse(parkingLots[0].checkGivenParkingSlotEmpty(parkingLotId1));
+            assertFalse(parkingLots[0].checkGivenParkingSlotEmpty(parkingLotId2));
+
 
     }
 }
