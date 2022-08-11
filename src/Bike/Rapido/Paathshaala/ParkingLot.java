@@ -2,6 +2,8 @@ package Bike.Rapido.Paathshaala;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 public class ParkingLot {
     ParkingSpace[] parkingSpace;
     int parkingLotSize;
@@ -52,7 +54,7 @@ public class ParkingLot {
 
    }
 
-   public  int allotParkingSpace(String carNumber) {
+   public Optional<Integer> allotParkingSpace(String carNumber) {
 
 
        for (int countParkingSlot = 0; countParkingSlot <parkingLotSize; countParkingSlot++)
@@ -65,7 +67,7 @@ public class ParkingLot {
                   {
                    notifyToAllObservers();
                   }
-                   return countParkingSlot;
+                   return Optional.of(countParkingSlot);
                }
 
 
@@ -73,7 +75,7 @@ public class ParkingLot {
 
        }
 
-       return -1;
+       return Optional.empty();
    }
 
    public boolean deallotParkingSpace(int id){
@@ -92,6 +94,9 @@ public class ParkingLot {
    }
    public boolean checkGivenParkingSlotEmpty(int id){
             return parkingSpace[id].getIsEmpty();
+   }
+   public boolean checkSlotId(int id){
+       return !checkGivenParkingSlotEmpty(id);
    }
 
     public boolean checkAnyParkingSlotEmpty(){

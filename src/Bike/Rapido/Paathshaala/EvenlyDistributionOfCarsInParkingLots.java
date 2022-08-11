@@ -1,19 +1,19 @@
 package Bike.Rapido.Paathshaala;
 
-public class EvenlyDistributionOfParkingVehicle implements ParkingStrategy {
+public class EvenlyDistributionOfCarsInParkingLots implements ParkingStrategy {
 
     public ParkingLot getParkingLot(ParkingLot[] parkingLots) {
         int minIndex=-1;
-        double maxValue=2;
+        double minValue=2;
         for(int countParkingLot=0;countParkingLot<parkingLots.length;countParkingLot++){
             if(parkingLots[countParkingLot].checkAnyParkingSlotEmpty())
             {
                 double calculateRatio=((double)parkingLots[countParkingLot].getCountOccupiedSlot())/parkingLots[countParkingLot].getParkingLotSize();
 
-                if(calculateRatio<maxValue)
+                if(calculateRatio<minValue)
                 {
                     minIndex=countParkingLot;
-                    maxValue=calculateRatio;
+                    minValue=calculateRatio;
                 }
             }
         }

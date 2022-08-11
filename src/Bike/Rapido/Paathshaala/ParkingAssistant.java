@@ -1,34 +1,33 @@
 package Bike.Rapido.Paathshaala;
 
-public class ParkingAssistant {
-    ParkingLot[] parkingLot;
-    int parkingLotSize;
+import java.util.Optional;
 
-    ParkingStrategy parkingStrategy;
-    public ParkingAssistant(ParkingLot[] parkingLot,int parkingLotSize){
-        this.parkingLotSize=parkingLotSize;
-        this.parkingLot =parkingLot;
+public class ParkingAssistant {
+    ParkingLot[] parkingLots;
+
+
+
+    public ParkingAssistant(ParkingLot[] parkingLot){
+
+        this.parkingLots =parkingLot;
     }
 
-    public int parkTheCarByParkingAssistant(String carNumber,ParkingStrategy strategy){
-        ParkingLot emptyLot=strategy.getParkingLot(parkingLot);
+    public Optional<Integer> parkTheCarByParkingAssistant(String carNumber, ParkingStrategy strategy){
+        ParkingLot emptyLot=strategy.getParkingLot(parkingLots);
         if(emptyLot!=null) {
             return emptyLot.allotParkingSpace(carNumber);
         }
-        return -1;
+        return Optional.empty();
 
 
     }
 
-    public boolean unparkTheCarByParkingAssistant(int parkingLotId, int parkingSpaceId){
-        return parkingLot[parkingLotId].deallotParkingSpace(parkingSpaceId);
+    public boolean unParkTheCarByParkingAssistant(int parkingLotId, int parkingSpaceId){
+        return parkingLots[parkingLotId].deallotParkingSpace(parkingSpaceId);
 
 
     }
 
-    public ParkingStrategy getParkingStrategy() {
-        return parkingStrategy;
-    }
 
 
 
